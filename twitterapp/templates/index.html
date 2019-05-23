@@ -1,0 +1,112 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Word Cloud</title>
+
+    <!-- なんかうまくlink出来ないので、このファイルに直接css書く -->
+    <!-- <link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}" /> -->
+    <!-- <link rel="stylesheet" type="text/css" href="../../static/css/style.css" /> -->
+</head>
+
+<body>
+    <h1>Word Cloud</h1>
+    <img src="{% static "images/wordcloud_sample.png" %}" alt="表示できません">
+    <div class="this">
+        <h2>このサイトについて</h2>
+        <p>Twitterからツイートを取得して、いい感じのタイポグラフィを作ります。</p>
+        <p>そのアカウントがよく使う単語を用いて生成されます。</p>
+        <p>上の画像はG's Fukuokaのアカウントを使用した例です。</p>
+    </div>
+    <div class="how">
+        <h2>使い方</h2>
+        <p>@を除いたユーザー名を入力してください。</p>
+        <p>（例）G's福岡のアカウントなら、「gsfukuoka」と入力。</p>
+        <p>鍵垢はできません。（エラーが出ます）</p>
+    </div>
+    <h2>やってみよう！！！</h2>
+    <p>{{insert_forms|safe}}</p>
+    <form action="{% url 'twitterapp:index' %}" method="post">
+        <!-- フォーム使った攻撃対策に必要な一文。無いとエラー。 -->
+        {% csrf_token %}
+        {{ form }}
+        <input class="btn-square" type="submit" value="送信">
+    </form>
+    <img src="{{insert_result}}">
+    <div id="output"></div>
+    <script>
+
+    </script>
+</body>
+
+</html>
+
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif, "Yu Gothic Medium", "游ゴシック Medium", YuGothic, "游ゴシック体", "ヒラギノ角ゴ Pro W3", "メイリオ", sans-serif;
+        line-height: 1.75;
+        font-size: 16px;
+
+        /*以下追加*/
+        width: 960px;
+        text-align: center;
+        margin-right: auto;
+        /*全体を中央寄せにするために*/
+        margin-left: auto;
+    }
+
+    /* パディングをサイズ内側にする処理 */
+    * {
+        padding: 0;
+        margin: 0;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -o-box-sizing: border-box;
+        -ms-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+    h1 {
+        font-family: 'Impact';
+        color: black;
+        font-size: 50px;
+        border-bottom: double 6px black;
+        margin-bottom: 20px;
+    }
+
+    .this {
+        margin-bottom: 20px;
+    }
+
+    .how {
+        margin-bottom: 50px;
+    }
+
+    .btn-square {
+        display: inline-block;
+        padding: 0.5em 1em;
+        text-decoration: none;
+        background: #668ad8;
+        /*ボタン色*/
+        color: #FFF;
+        border-bottom: solid 4px #627295;
+        border-radius: 3px;
+    }
+
+    .btn-square:active {
+        /*ボタンを押したとき*/
+        -webkit-transform: translateY(4px);
+        transform: translateY(4px);
+        /*下に動く*/
+        border-bottom: none;
+        /*線を消す*/
+    }
+
+    form {
+        margin-bottom: 20px
+    }
+</style>
